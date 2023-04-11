@@ -5,15 +5,15 @@
 class CCollisionComponent;
 class AActor;
 
-class Block : public ASpriteActor
+class ABlock : public ASpriteActor
 {
 public:
-							Block();
+							ABlock();
 
 	virtual void			OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent);
 	CCollisionComponent*	GetCollisionComponent() const {return Collision;}	
 
-	virtual					~Block() {}
+	virtual					~ABlock() {}
 
 protected:
 	CCollisionComponent*	Collision;

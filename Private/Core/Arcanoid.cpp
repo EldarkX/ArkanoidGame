@@ -22,6 +22,12 @@
 
 ArcanoidGameEngine* ArcanoidGameEngine::mArcanoidGameEngine = nullptr;
 
+//TODO: change with GameEngine::GetAllActorOfClass()
+ArcanoidGameEngine* ArcanoidGameEngine::GetArcanoidGameEngine()
+{
+	return mArcanoidGameEngine;
+}
+
 bool ArcanoidGameEngine::Init()
 {
 	srand(time(NULL));
@@ -29,25 +35,16 @@ bool ArcanoidGameEngine::Init()
 	mArcanoidGameEngine = this;
 
 	/*CREATE PLAYER*/
-	mPlayer = CreateActor<Player>(Vector2D::UnitVector, Vector2D::UnitVector, "Player");
-	float mPlayerWidth = mPlayer->GetSpriteComponent()->GetTexture()->GetWidth();
-	float mPlayerHeight = mPlayer->GetSpriteComponent()->GetTexture()->GetHeight();
-
-	mPlayer->SetActorPosition(Vector2D(0.f, 0 - GetWindowHeight() / 2.f));
-	mPlayer->SetActorScale(Vector2D(mPlayerWidth, mPlayerHeight));
-	mPlayer->SetActorScale(Vector2D(0.5f, 1.f));
+	PlayerInitPosition = Vector2D(0.f, 0 - GetWindowHeight() / 2.f);
+	mPlayer = CreateActor<APlayer>(PlayerInitPosition, Vector2D(0.5f, 1.f), "Player");
+	
 	/*CREATE BALL*/
+	BallInitPosition = Vector2D(0, -(GetWindowHeight() / 2.f) + GetPlayer()->GetActorSize().Y() + 1.f);
+	mBall = CreateActor<ABall>(BallInitPosition, Vector2D::UnitVector, "Ball");
 
-	mBall = CreateActor<Ball>(Vector2D::UnitVector, Vector2D::UnitVector, "Ball");
-
-	float mBallWidth = mBall->GetSpriteComponent()->GetTexture()->GetWidth();
-	float mBallHeight = mBall->GetSpriteComponent()->GetTexture()->GetHeight();
-
-	Vector2D BallPosition = Vector2D(0, -(GetWindowHeight() / 2.f) + GetPlayer()->GetActorSize().Y() + 1.f);
-
-	mBall->GetActorTransform()->SetPosition(BallPosition);
 	mBall->mOnBallFallOut += MakeDelegate(this, &ArcanoidGameEngine::OnBallFallOut);
 
+	//Add lives
 	int x = GetWindowHalfWidth() - 30.f;
 	int y = GetWindowHalfHeight() - 30.f;
 	auto BallLivesTexture = new OTexture("Assets\\Sprites\\BallLife.png");
@@ -58,34 +55,18 @@ bool ArcanoidGameEngine::Init()
 		x -= 15.f + BallLives[index]->GetActorSize().X();
 	}
 
-	LoadLevel("tmp");
+	CreateLevel();
 
-	return 1;
+	return true;
 }
 
-void ArcanoidGameEngine::CheckWinCondition(AActor* Actor)
+void ArcanoidGameEngine::CreateLevel()
 {
-	blocksAmount--;
-	if (!blocksAmount)
-	{
-		std::cout << "Win!" << std::endl;
-	}
-}
-
-ArcanoidGameEngine* ArcanoidGameEngine::GetArcanoidGameEngine()
-{
-	return mArcanoidGameEngine;
-}
-
-void ArcanoidGameEngine::LoadLevel(std::string path)
-{
-	//TODO: load level from file
-	std::vector<std::string> level;
-
+	//TODO: change with level settings - read from file
 	int mBlocksInRow = 12;
 	int rows = 6;
 
-	blocksAmount = rows * mBlocksInRow;
+	BlocksAmount = rows * mBlocksInRow;
 
 	float offsetW = WindowWidth / 8.f;
 	float offsetH = WindowHeight / 10.f;
@@ -93,8 +74,8 @@ void ArcanoidGameEngine::LoadLevel(std::string path)
 	float gapW = 10.f;
 	float gapH = 10.f;
 
-	auto BlockTexture = new OTexture("Assets\\Sprites\\block.png");
-	auto BuffBlockTexture = new OTexture("Assets\\Sprites\\buffBlock.png");
+	auto* BlockTexture = new OTexture("Assets\\Sprites\\block.png");
+	auto* BuffBlockTexture = new OTexture("Assets\\Sprites\\buffBlock.png");
 	if (!BlockTexture)
 	{
 		std::cout << "ERROR: AcranoidGameEngine::LoadLevel: bad block texture." << std::endl;
@@ -114,36 +95,50 @@ void ArcanoidGameEngine::LoadLevel(std::string path)
 			float Y = GetWindowHalfHeight() - (offsetH + heightStep * row);
 			Vector2D BlockPosition = Vector2D(X, Y);
 
-			Block* newBlock;
+			ABlock* newBlock;
 			bool Condition = (row == 5 && (col == 0 || col == 1 || col == 10 || col == 11))
 				|| (row % 2 && (col == 5 || col == 6));
 			if (Condition)
-				newBlock = CreateActor<ABuffBlock>(BlockPosition, Vector2D::UnitVector, "Block " + std::to_string(row * mBlocksInRow + col));
+				newBlock = CreateActor<ABuffBlock>(BlockPosition, Vector2D::UnitVector, "ABlock " + std::to_string(row * mBlocksInRow + col));
 			else
-				newBlock = CreateActor<Block>(BlockPosition, Vector2D::UnitVector, "Block " + std::to_string(row * mBlocksInRow + col));
+				newBlock = CreateActor<ABlock>(BlockPosition, Vector2D::UnitVector, "ABlock " + std::to_string(row * mBlocksInRow + col));
 			newBlock->GetSpriteComponent()->SetTexture(Condition ? BuffBlockTexture : BlockTexture);
 
 			newBlock->OnStartBeingPendingToKill += MakeDelegate(this, &ArcanoidGameEngine::CheckWinCondition);
 		}
 	}
 
-	Block* leftWall = CreateActor<Block>(Vector2D(-GetWindowHalfWidth(), 0.f), Vector2D(8.f, WindowHeight), "Left wall");
+	//Create walls: right, top, left
+	ABlock* leftWall = CreateActor<ABlock>(Vector2D(-GetWindowHalfWidth(), 0.f), Vector2D(8.f, WindowHeight), "Left wall");
 	leftWall->GetCollisionComponent()->OnComponentCollided.Clear();
-	Block* rightWall = CreateActor<Block>(Vector2D(GetWindowHalfWidth(), 0.f), Vector2D(8.f, WindowHeight), "Right wall");
+	ABlock* rightWall = CreateActor<ABlock>(Vector2D(GetWindowHalfWidth(), 0.f), Vector2D(8.f, WindowHeight), "Right wall");
 	rightWall->GetCollisionComponent()->OnComponentCollided.Clear();
-	Block* topWall = CreateActor<Block>(Vector2D(0.f, GetWindowHalfHeight()), Vector2D(WindowWidth, 8.f), "Top wall");
+	ABlock* topWall = CreateActor<ABlock>(Vector2D(0.f, GetWindowHalfHeight()), Vector2D(WindowWidth, 8.f), "Top wall");
 	topWall->GetCollisionComponent()->OnComponentCollided.Clear();
 }
 
-void ArcanoidGameEngine::OnBallFallOut(Ball* ball)
+void ArcanoidGameEngine::CheckWinCondition(AActor* Actor)
+{
+	--BlocksAmount;
+
+	if (!BlocksAmount)
+	{
+		std::cout << "Win!" << std::endl;
+		SetGameStatus(EGameStatus::GSE_Exit);
+	}
+}
+
+void ArcanoidGameEngine::OnBallFallOut(ABall* ball)
 {
 	if (BallLives.size() > 1)
 	{
 		BallLives.back()->SetIsPendingToKill(true);
 		BallLives.erase(BallLives.end() - 1);
-		mPlayer->SetActorPosition(Vector2D(0.f, 0 - GetWindowHeight() / 2.f));
-		mBall->GetActorTransform()->SetPosition(Vector2D(0, -(GetWindowHeight() / 2.f) + GetPlayer()->GetActorSize().Y() + 1.f));
-		mBall->GetActorTransform()->SetScale(Vector2D::UnitVector);
+
+		mPlayer->SetActorPosition(PlayerInitPosition);
+
+		mBall->GetActorTransform()->SetPosition(BallInitPosition);
+		mBall->ResetBall();
 	}
 	else
 	{

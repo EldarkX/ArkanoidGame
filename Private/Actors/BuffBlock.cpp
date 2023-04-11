@@ -10,13 +10,11 @@
 void ABuffBlock::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent)
 {
 	static int BuffNumber = 0;
+
 	Vector2D Position = Vector2D(GetActorPosition().X(), GetActorPosition().Y() - GetActorSize().Y() - 10.f);
-
-	auto Buff = GameEngine::GetGameEngine()->CreateActor<ABuff>(Position, Vector2D::UnitVector, "BallBigSize" + BuffNumber);
-
-	Buff->SetBuffType(static_cast<EBuffType>(rand() % 4));
+	auto Buff = GameEngine::GetGameEngine()->CreateActor<ABuff>(Position, Vector2D::UnitVector, "Buff" + BuffNumber);
 
 	++BuffNumber;
 
-	SetIsPendingToKill(true);
+	ABlock::OnCollision(AnotherActor, AnotherCollisionComponent);
 }

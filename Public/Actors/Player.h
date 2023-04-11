@@ -6,14 +6,14 @@ class CCollisionComponent;
 class CLinearMovementComponent;
 class CPlayerController;
 
-class Player : public ASpriteActor
+class APlayer : public ASpriteActor
 {
 public:
-								Player();
+								APlayer();
 
 	virtual void				Tick(float DeltaTime) override;
 
-	CCollisionComponent*		GetCollisionComponent() const { return Collision;}
+	CCollisionComponent*		GetCollisionComponent() const { return Collision; }
 	CLinearMovementComponent*	GetMovementComponent() const { return MovementComponent; }
 	CPlayerController*			GetPlayerController() const { return PlayerController; }
 
@@ -22,6 +22,5 @@ protected:
 	CLinearMovementComponent*	MovementComponent;
 	CPlayerController*			PlayerController;
 private:
-	float						PlayerHalfWidth;
-	float						PlayerHalfHeight;
+	float						InitSpeed = 500.f;
 };

@@ -7,6 +7,7 @@
 #include "Modules/ObjectModule/Object/Actor/Components/CollisionComponent.h"
 #include "Modules/ObjectModule/Object/Actor/Components/Transform2DComponent.h"
 #include "Modules/MathModule/Vector2D.h"
+
 #include "Utils/Delegate/Delegate.h"
 
 #include "Core/Arcanoid.h"
@@ -24,8 +25,13 @@ ABuff::ABuff() : ASpriteActor()
 
 	MovementComponent = AddComponent<CLinearMovementComponent>();
 
+	//TODO: Change with base values, no magic constants
 	MovementComponent->SetVelocity(Vector2D(0.f, -1.f));
 	MovementComponent->SetSpeed(150.f);
+
+	//TODO: it is much better to have a pool of buffs and kinda buff manager to handle resource management
+	int BuffIndex = rand() % 4 + 1;
+	SetBuffType(static_cast<EBuffType>(BuffIndex));
 }
 
 void ABuff::SetBuffType(EBuffType newBuffType)
@@ -34,6 +40,7 @@ void ABuff::SetBuffType(EBuffType newBuffType)
 
 	std::string path;
 
+	//TODO: it is much better to have a pool of buffs and kinda buff manager to handle resource management
 	switch (BuffType)
 	{
 	case EBuffType::BallBigSize:

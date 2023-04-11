@@ -6,10 +6,10 @@
 class CCollisionComponent;
 class CLinearMovementComponent;
 
-class Ball : public ASpriteActor
+class ABall : public ASpriteActor
 {
 public:
-									Ball();
+									ABall();
 
 	virtual void					Tick(float deltaTime) override;
 	virtual void					OnCollision(class AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent);
@@ -17,13 +17,17 @@ public:
 	CLinearMovementComponent		*GetMovementComponent() const { return MovementComponent; }
 	CCollisionComponent				*GetCollisionComponent() const { return Collision; }
 	
-	virtual							~Ball() {}
+	void							ResetBall();
+
+	virtual							~ABall() {}
 public:
-	DelegateLib::MulticastDelegate1<Ball*>	mOnBallFallOut;
+	DelegateLib::MulticastDelegate1<ABall*>	mOnBallFallOut;
 protected:							
 	CLinearMovementComponent*	MovementComponent;
 	CCollisionComponent*		Collision;
-									
+	
+	float						InitSpeed = 400.f;
+
 	bool						isCollided = false;
 };									
 

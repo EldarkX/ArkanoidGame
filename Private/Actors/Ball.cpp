@@ -12,7 +12,7 @@
 
 #include <algorithm>
 
-Ball::Ball() : ASpriteActor()
+ABall::ABall() : ASpriteActor()
 {
 	mSpriteComponent->SetTexture(new OTexture("Assets\\Sprites\\Ball.png"));
 	MovementComponent = AddComponent<CLinearMovementComponent>();
@@ -22,14 +22,12 @@ Ball::Ball() : ASpriteActor()
 	Collision->SetCollisionResponseToChannel(ECollisionChannel::CCE_Player, ECollisionType::CTE_Collide);
 	Collision->SetCollisionResponseToChannel(ECollisionChannel::CCE_StaticObject1, ECollisionType::CTE_Collide);
 
-	Collision->OnComponentCollided += MakeDelegate(this, &Ball::OnCollision);
+	Collision->OnComponentCollided += MakeDelegate(this, &ABall::OnCollision);
 
-	MovementComponent->SetSpeed(400.f);
-
-	MovementComponent->SetVelocity(Vector2D(0.2f, 1.f));
+	ResetBall();
 };
 
-void Ball::Tick(float deltaTime)
+void ABall::Tick(float deltaTime)
 {
 	AActor::Tick(deltaTime);
 
@@ -41,7 +39,7 @@ void Ball::Tick(float deltaTime)
 	}
 }
 
-void Ball::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent)
+void ABall::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent)
 {
 	if (!isCollided)
 	{
@@ -61,4 +59,12 @@ void Ball::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisi
 				MovementComponent->SetVelocity(Vector2D(-MovementComponent->GetVelocity().X(), MovementComponent->GetVelocity().Y()));
 		}
 	}
+}
+
+void ABall::ResetBall()
+{
+	mTransformComponent->SetScale(Vector2D::UnitVector);
+
+	MovementComponent->SetSpeed(InitSpeed);
+	MovementComponent->SetVelocity(Vector2D(0.2f, 1.f));
 }

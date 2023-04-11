@@ -11,7 +11,7 @@ void CPlayerController::ProccessInput(const SDL_Event* event)
 {
 	CInputComponent::ProccessInput(event);
 
-	ArcanoidGameEngine* Game = dynamic_cast<ArcanoidGameEngine *>(GameEngine::GetGameEngine());
+	ArcanoidGameEngine* Game = ArcanoidGameEngine::GetArcanoidGameEngine();
 
 	static bool RightPressed = false;
 	static bool LeftPressed = false;
@@ -24,19 +24,19 @@ void CPlayerController::ProccessInput(const SDL_Event* event)
 			Game->SetGameStatus(EGameStatus::GSE_Game);
 	}
 
-	Player* player = Game->GetPlayer();
+	APlayer* Player = Game->GetPlayer();
 
 	if (event->key.keysym.sym == SDL_KeyCode::SDLK_RIGHT
 		|| event->key.keysym.sym == SDL_KeyCode::SDLK_d)
 	{
 		if (event->type == SDL_KEYDOWN && !RightPressed)
 		{
-			player->GetMovementComponent()->SetVelocity(Vector2D(player->GetMovementComponent()->GetVelocity().X() + 1, 0));
+			Player->GetMovementComponent()->SetVelocity(Vector2D(Player->GetMovementComponent()->GetVelocity().X() + 1, 0));
 			RightPressed = true;
 		}
 		else if (event->type == SDL_KEYUP && RightPressed)
 		{
-			player->GetMovementComponent()->SetVelocity(Vector2D(player->GetMovementComponent()->GetVelocity().X() - 1, 0));
+			Player->GetMovementComponent()->SetVelocity(Vector2D(Player->GetMovementComponent()->GetVelocity().X() - 1, 0));
 			RightPressed = false;
 		}
 	}
@@ -45,12 +45,12 @@ void CPlayerController::ProccessInput(const SDL_Event* event)
 	{
 		if (event->type == SDL_KEYDOWN && !LeftPressed)
 		{
-			player->GetMovementComponent()->SetVelocity(Vector2D(player->GetMovementComponent()->GetVelocity().X() - 1, 0));
+			Player->GetMovementComponent()->SetVelocity(Vector2D(Player->GetMovementComponent()->GetVelocity().X() - 1, 0));
 			LeftPressed = true;
 		}
 		else if (event->type == SDL_KEYUP && LeftPressed)
 		{
-			player->GetMovementComponent()->SetVelocity(Vector2D(player->GetMovementComponent()->GetVelocity().X() + 1, 0));
+			Player->GetMovementComponent()->SetVelocity(Vector2D(Player->GetMovementComponent()->GetVelocity().X() + 1, 0));
 			LeftPressed = false;
 		}
 	}

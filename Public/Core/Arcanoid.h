@@ -2,10 +2,8 @@
 
 #include "Modules/CoreModule/GameEngine.h"
 
-#include <string>
-
-class Ball;
-class Player;
+class ABall;
+class APlayer;
 class ASpriteActor;
 
 class ArcanoidGameEngine : public GameEngine
@@ -15,21 +13,24 @@ public:
 
 	virtual bool					Init() override;
 
-	Player							*GetPlayer() const { return mPlayer; };
-	Ball							*GetBall() const { return mBall; }
-	void							LoadLevel(std::string path);
+	APlayer*						GetPlayer() const { return mPlayer; };
+	ABall*							GetBall() const { return mBall; }
+
+	void							CreateLevel();
 	void							CheckWinCondition(AActor* Actor);
 
-
-	static ArcanoidGameEngine		*GetArcanoidGameEngine();
+	static ArcanoidGameEngine*		GetArcanoidGameEngine();
 private:
-	void							OnBallFallOut(Ball* ball);
+	void							OnBallFallOut(ABall* ball);
 protected:
 	std::vector<ASpriteActor *>		BallLives;
-	Player							*mPlayer = nullptr;
-	Ball							*mBall = nullptr;
+	APlayer*						mPlayer = nullptr;
+	ABall*							mBall = nullptr;
 	static ArcanoidGameEngine*		mArcanoidGameEngine;	
 
-	int								blocksAmount = 0;
+	Vector2D						PlayerInitPosition = Vector2D::UnitVector;
+	Vector2D						BallInitPosition = Vector2D::UnitVector;
+
+	int								BlocksAmount = 0;
 	int								Lives = 3;
 };

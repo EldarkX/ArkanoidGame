@@ -12,7 +12,7 @@
 #include "Modules/RenderModule/Texture.h"
 #include "Modules/ObjectModule/Object/Actor/Components/AnimSpriteComponent.h"
 
-Player::Player() : ASpriteActor()
+APlayer::APlayer() : ASpriteActor()
 {
 	mSpriteComponent->SetTexture(new OTexture("Assets\\Sprites\\player.png"));
 
@@ -25,10 +25,10 @@ Player::Player() : ASpriteActor()
 
 	PlayerController = AddComponent<CPlayerController>();
 
-	MovementComponent->SetSpeed(500.f);
+	MovementComponent->SetSpeed(InitSpeed);
 }
 
-void Player::Tick(float deltaTime)
+void APlayer::Tick(float deltaTime)
 {
 	AActor::Tick(deltaTime);
 
@@ -41,4 +41,3 @@ void Player::Tick(float deltaTime)
 		SetActorPosition(Vector2D(GameEngine::GetGameEngine()->GetWindowHalfWidth() - GetActorSize().X() / 2, GetActorPosition().Y()));
 	}
 }
-
