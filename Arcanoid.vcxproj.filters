@@ -13,54 +13,78 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Source Files\Actors">
+      <UniqueIdentifier>{f4507c5f-3eda-41fd-9ec3-cf3ac2dcf54c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{8d4d1b9b-4aec-4305-9041-fe13a7bde431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{7a07b8c0-dc8c-4083-91cb-5555f2f77bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Actors">
+      <UniqueIdentifier>{f0637663-a616-44d8-973d-22b55fb1ef0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{9f4d515b-7086-40f7-bdf9-f1727acfe414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{2870ad29-77bd-4361-964f-24b4ba3a5878}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="private\actors\Ball.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="private\actors\Block.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="private\actors\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="private\actors\PlayerController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="private\core\Arcanoid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="private\core\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Private\Actors\BuffBlock.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="private\actors\Ball.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="private\actors\Block.cpp">
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
     <ClCompile Include="Private\Actors\Buff.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Actors\BuffBlock.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="private\actors\Player.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="private\actors\PlayerController.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="private\core\Arcanoid.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Core\BuffManager.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="public\actors\Ball.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
     <ClInclude Include="public\actors\Block.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="public\actors\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="public\actors\PlayerController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="public\core\Arcanoid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Public\Actors\BuffBlock.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
     <ClInclude Include="Public\Actors\Buff.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Actors\BuffBlock.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="public\actors\Player.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="public\core\Arcanoid.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Core\BuffManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Components\PlayerController.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

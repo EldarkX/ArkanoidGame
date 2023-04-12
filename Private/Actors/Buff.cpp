@@ -29,39 +29,16 @@ ABuff::ABuff() : ASpriteActor()
 	MovementComponent->SetVelocity(Vector2D(0.f, -1.f));
 	MovementComponent->SetSpeed(150.f);
 
-	//TODO: it is much better to have a pool of buffs and kinda buff manager to handle resource management
 	int BuffIndex = rand() % 4 + 1;
 	SetBuffType(static_cast<EBuffType>(BuffIndex));
-}
-
-void ABuff::SetBuffType(EBuffType newBuffType)
-{
-	BuffType = newBuffType;
-
-	std::string path;
-
-	//TODO: it is much better to have a pool of buffs and kinda buff manager to handle resource management
-	switch (BuffType)
-	{
-	case EBuffType::BallBigSize:
-		path = "Assets\\Sprites\\BuffBallBigSize.png";
-		break;
-	case EBuffType::BallSlowDown:
-		path = "Assets\\Sprites\\BuffBallSlowDown.png";
-		break;
-	case EBuffType::BallSmallSize:
-		path = "Assets\\Sprites\\BuffBallSmallSize.png";
-		break;
-	case EBuffType::BallSpeedUp:
-		path = "Assets\\Sprites\\BuffBallSpeedUp.png";
-		break;
-	}
-
-	mSpriteComponent->SetTexture(new OTexture(path));
+	mSpriteComponent->SetTexture(ArcanoidGameEngine::GetArcanoidGameEngine()->GetBuffManager()->GetBuffTexture(BuffType));
 }
 
 void ABuff::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent)
 {
+	if (GetIsPendingToKill())
+		return; 
+
 	Vector2D	CurrentScale;
 	float		CurrentSpeed;
 
@@ -82,6 +59,8 @@ void ABuff::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollis
 	case EBuffType::BallSpeedUp:
 		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->SetSpeed(CurrentSpeed * 1.25f);
 		break;
+	default:
+		break;
 	}
 
 	SetIsPendingToKill(true);
@@ -91,8 +70,15 @@ void ABuff::Tick(float deltaTime)
 {
 	AActor::Tick(deltaTime);
 
-	if (mTransformComponent->GetPosition().Y() < -GameEngine::GetGameEngine()->GetWindowHalfHeight())
+	float UpperBoundY = mTransformComponent->GetPosition().Y() + mSpriteComponent->GetTexture()->GetHeight() / 2.f;
+	if (!GetIsPendingToKill() && UpperBoundY < ArcanoidGameEngine::GetArcanoidGameEngine()->GetKillY())
 	{
+		Collision->SetCollisionResponseToAllChannels(ECollisionType::CTE_Ignore);
 		SetIsPendingToKill(true);
 	}
+}
+
+void ABuff::SetBuffType(EBuffType newBuffType)
+{
+	BuffType = newBuffType;
 }

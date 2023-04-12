@@ -1,5 +1,5 @@
 
-#include "Components/PlayerController.h"
+#include "Actors/PlayerController.h"
 
 #include "Modules/ObjectModule/Object/Actor/Components/LinearMovementComponent.h"
 #include "Modules/MathModule/Vector2D.h"

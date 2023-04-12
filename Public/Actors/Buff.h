@@ -1,15 +1,7 @@
 #pragma once
 
 #include "Modules/ObjectModule/Object/Actor/SpriteActor.h"
-
-enum class EBuffType
-{
-	None,
-	BallBigSize,
-	BallSmallSize,
-	BallSpeedUp,
-	BallSlowDown
-};
+#include "Core/BuffManager.h"
 
 class CCollisionComponent;
 class CLinearMovementComponent;

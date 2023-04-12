@@ -1,7 +1,7 @@
 
 #include "Actors/Player.h"
 
-#include "Actors/PlayerController.h"
+#include "Components/PlayerController.h"
 
 #include "Modules/CoreModule/GameEngine.h"
 #include "Modules/ObjectModule/Object/Actor/Components/SpriteComponent.h"

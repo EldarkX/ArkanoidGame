@@ -1,6 +1,8 @@
 
 #include "Core/Arcanoid.h"
 
+#include "Core/BuffManager.h"
+
 #include "Actors/Ball.h"
 #include "Actors/Player.h"
 #include "Actors/Block.h"
@@ -33,6 +35,19 @@ bool ArcanoidGameEngine::Init()
 	srand(time(NULL));
 
 	mArcanoidGameEngine = this;
+
+	KillY = -GetWindowHalfHeight();
+
+	mBuffManager = new BuffManager();
+	if (!mBuffManager)
+	{
+		std::cout << "ArcanoidGameEngine::Init() : Failed to create BuffManager" << std::endl;
+		return false;
+	}
+	if (!mBuffManager->Initialize())
+	{
+		return false;
+	}
 
 	/*CREATE PLAYER*/
 	PlayerInitPosition = Vector2D(0.f, 0 - GetWindowHeight() / 2.f);
@@ -97,7 +112,7 @@ void ArcanoidGameEngine::CreateLevel()
 
 			ABlock* newBlock;
 			bool Condition = (row == 5 && (col == 0 || col == 1 || col == 10 || col == 11))
-				|| (row % 2 && (col == 5 || col == 6));
+				|| (row % 10 && (col == 5 || col == 6));
 			if (Condition)
 				newBlock = CreateActor<ABuffBlock>(BlockPosition, Vector2D::UnitVector, "ABlock " + std::to_string(row * mBlocksInRow + col));
 			else

@@ -12,7 +12,7 @@ void ABuffBlock::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherC
 	static int BuffNumber = 0;
 
 	Vector2D Position = Vector2D(GetActorPosition().X(), GetActorPosition().Y() - GetActorSize().Y() - 10.f);
-	auto Buff = GameEngine::GetGameEngine()->CreateActor<ABuff>(Position, Vector2D::UnitVector, "Buff" + BuffNumber);
+	GameEngine::GetGameEngine()->CreateActor<ABuff>(Position, Vector2D::UnitVector, "Buff" + std::to_string(BuffNumber));
 
 	++BuffNumber;
 

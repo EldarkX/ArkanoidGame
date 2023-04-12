@@ -16,14 +16,23 @@ ABlock::ABlock() : ASpriteActor()
 	Collision->SetCollisionResponseToChannel(ECollisionChannel::CCE_DynamicObject1, ECollisionType::CTE_Collide);
 
 	Collision->OnComponentCollided += DelegateLib::MakeDelegate(this, &ABlock::OnCollision);
+
+	OnStartBeingPendingToKill += DelegateLib::MakeDelegate(this, &ABlock::OnStartBeingPendingToKillCallback);
 }
 
 void ABlock::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollisionComponent)
 {
 	if (AnotherCollisionComponent->GetCollisionChannel() == ECollisionChannel::CCE_DynamicObject1)
 	{
-		Collision->SetCollisionResponseToAllChannels(ECollisionType::CTE_Ignore);
 		SetIsPendingToKill(true);
+	}
+}
+
+void ABlock::OnStartBeingPendingToKillCallback(AActor* Actor)
+{
+	if (Collision)
+	{
+		Collision->SetCollisionResponseToAllChannels(ECollisionType::CTE_Ignore);
 	}
 }
 
