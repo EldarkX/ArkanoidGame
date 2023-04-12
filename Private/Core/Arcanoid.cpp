@@ -38,6 +38,7 @@ bool ArcanoidGameEngine::Init()
 
 	KillY = -GetWindowHalfHeight();
 
+	/*BUFF MANAGER*/
 	mBuffManager = new BuffManager();
 	if (!mBuffManager)
 	{
@@ -59,7 +60,7 @@ bool ArcanoidGameEngine::Init()
 
 	mBall->mOnBallFallOut += MakeDelegate(this, &ArcanoidGameEngine::OnBallFallOut);
 
-	//Add lives
+	/*LIVES*/
 	int x = GetWindowHalfWidth() - 30.f;
 	int y = GetWindowHalfHeight() - 30.f;
 	auto BallLivesTexture = new OTexture("Assets\\Sprites\\BallLife.png");
@@ -123,7 +124,7 @@ void ArcanoidGameEngine::CreateLevel()
 		}
 	}
 
-	//Create walls: right, top, left
+	/*WALLS*/
 	ABlock* leftWall = CreateActor<ABlock>(Vector2D(-GetWindowHalfWidth(), 0.f), Vector2D(8.f, WindowHeight), "Left wall");
 	leftWall->GetCollisionComponent()->OnComponentCollided.Clear();
 	ABlock* rightWall = CreateActor<ABlock>(Vector2D(GetWindowHalfWidth(), 0.f), Vector2D(8.f, WindowHeight), "Right wall");
@@ -147,16 +148,21 @@ void ArcanoidGameEngine::OnBallFallOut(ABall* ball)
 {
 	if (BallLives.size() > 1)
 	{
-		BallLives.back()->SetIsPendingToKill(true);
-		BallLives.erase(BallLives.end() - 1);
-
-		mPlayer->SetActorPosition(PlayerInitPosition);
-
-		mBall->GetActorTransform()->SetPosition(BallInitPosition);
-		mBall->ResetBall();
+		SpendLife();
 	}
 	else
 	{
 		SetGameStatus(EGameStatus::GSE_Exit);
 	}
+}
+
+void ArcanoidGameEngine::SpendLife()
+{
+	BallLives.back()->SetIsPendingToKill(true);
+	BallLives.erase(BallLives.end() - 1);
+
+	mPlayer->SetActorPosition(PlayerInitPosition);
+
+	mBall->GetActorTransform()->SetPosition(BallInitPosition);
+	mBall->ResetBall();
 }

@@ -24,10 +24,8 @@ ABuff::ABuff() : ASpriteActor()
 	Collision->OnComponentCollided += MakeDelegate(this, &ABuff::OnCollision);
 
 	MovementComponent = AddComponent<CLinearMovementComponent>();
-
-	//TODO: Change with base values, no magic constants
 	MovementComponent->SetVelocity(Vector2D(0.f, -1.f));
-	MovementComponent->SetSpeed(150.f);
+	MovementComponent->SetSpeed(InitSpeed);
 
 	int BuffIndex = rand() % 4 + 1;
 	SetBuffType(static_cast<EBuffType>(BuffIndex));
@@ -39,25 +37,25 @@ void ABuff::OnCollision(AActor* AnotherActor, CCollisionComponent* AnotherCollis
 	if (GetIsPendingToKill())
 		return; 
 
-	Vector2D	CurrentScale;
-	float		CurrentSpeed;
+	Vector2D	CurrentBallScale;
+	float		CurrentBallSpeed;
 
-	CurrentScale = ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetActorTransform()->GetScale();
-	CurrentSpeed = ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->GetSpeed();
+	CurrentBallScale = ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetActorTransform()->GetScale();
+	CurrentBallSpeed = ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->GetSpeed();
 	
 	switch (BuffType)
 	{
 	case EBuffType::BallBigSize:
-		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetActorTransform()->SetScale(CurrentScale * 1.25f);
+		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetActorTransform()->SetScale(CurrentBallScale * 1.25f);
 		break;
 	case EBuffType::BallSlowDown:
-		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->SetSpeed(CurrentSpeed * 0.75f);
+		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->SetSpeed(CurrentBallSpeed * 0.75f);
 		break;
 	case EBuffType::BallSmallSize:
-		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetActorTransform()->SetScale(CurrentScale * 0.75f);
+		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetActorTransform()->SetScale(CurrentBallScale * 0.75f);
 		break;
 	case EBuffType::BallSpeedUp:
-		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->SetSpeed(CurrentSpeed * 1.25f);
+		ArcanoidGameEngine::GetArcanoidGameEngine()->GetBall()->GetMovementComponent()->SetSpeed(CurrentBallSpeed * 1.25f);
 		break;
 	default:
 		break;

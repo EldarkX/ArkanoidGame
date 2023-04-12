@@ -24,5 +24,7 @@ protected:
 	CCollisionComponent*		Collision;
 	CLinearMovementComponent*	MovementComponent;
 private:
+	float						InitSpeed = 150.f;
 	EBuffType					BuffType = EBuffType::None;
+
 };

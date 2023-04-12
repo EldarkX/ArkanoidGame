@@ -27,6 +27,7 @@ public:
 
 private:
 	void							OnBallFallOut(ABall* ball);
+	void							SpendLife();
 
 protected:
 	std::vector<ASpriteActor *>		BallLives;

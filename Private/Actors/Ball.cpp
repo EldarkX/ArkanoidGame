@@ -1,6 +1,6 @@
 #include "Actors/Ball.h"
 
-#include "Modules/CoreModule/GameEngine.h"
+#include "Core/Arcanoid.h"
 
 #include "Modules/ObjectModule/Object/Actor/Components/SpriteComponent.h"
 #include "Modules/ObjectModule/Object/Actor/Components/AnimSpriteComponent.h"
@@ -33,7 +33,7 @@ void ABall::Tick(float deltaTime)
 
 	isCollided = false;
 
-	if (mTransformComponent->GetPosition().Y() < -GameEngine::GetGameEngine()->GetWindowHalfHeight())
+	if (mTransformComponent->GetPosition().Y() < ArcanoidGameEngine::GetArcanoidGameEngine()->GetKillY())
 	{
 		mOnBallFallOut(this);
 	}
